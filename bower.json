@@ -25,5 +25,8 @@
   "devDependencies": {
     "bluebird": "~2.9.12",
     "requirejs": "~2.1.16"
+  },
+  "dependencies": {
+    "require-promise-worker.js": "~0.1.0"
   }
 }
