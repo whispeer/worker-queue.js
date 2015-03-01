@@ -4,7 +4,7 @@
   "authors": [
     "Nils Kenneweg <nk@ovt.me>"
   ],
-  "description": "A worker using require and promises.",
+  "description": "A worker queue using require and promises.",
   "main": "src/index.js",
   "moduleType": [
     "amd"
