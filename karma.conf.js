@@ -19,6 +19,8 @@ module.exports = function(config) {
       {pattern: 'src/**/*.js', included: false},
       {pattern: 'bower_components/bluebird/js/browser/bluebird.js', included: false},
       {pattern: 'bower_components/requirejs/require.js', included: false},
+      {pattern: 'bower_components/require-promise-worker.js/src/index.js', included: false},
+      {pattern: 'bower_components/require-promise-worker.js/src/worker.js', included: false},
       {pattern: 'spec/**/*.js', included: false}
     ],
 

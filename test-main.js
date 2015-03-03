@@ -19,6 +19,10 @@ require.config({
   // dynamically load all test files
   deps: allTestFiles,
 
+  paths: {
+    "PromiseWorker": "bower_components/require-promise-worker.js/src/index"
+  },
+
   // we have to kickoff jasmine, as it is asynchronous
   callback: window.__karma__.start
 });
