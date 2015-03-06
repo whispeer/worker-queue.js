@@ -38,6 +38,17 @@ define(["src/index", "bower_components/bluebird/js/browser/bluebird"], function(
 				done();
 			});
 		});
+
+		it('calls meta listeners with progress', function (done) {
+			var finished = 0, timeoutLength = 500, cb = jasmine.createSpy('callback');
+			var promiseQueue = new PromiseQueue(bluebird, 2, "spec/timedWorker", "/base/bower_components/requirejs/require.js");
+			promiseQueue.schedule(timeoutLength, cb).then(function (result) {
+				expect(cb).toHaveBeenCalled();
+				expect(result).toBe(1);
+				done();
+			});
+		});
+
 	});
 });
 
