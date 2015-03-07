@@ -1,5 +1,5 @@
 {
-  "name": "require-promise-worker.js",
+  "name": "worker-queue.js",
   "version": "0.0.1",
   "authors": [
     "Nils Kenneweg <nk@ovt.me>"
