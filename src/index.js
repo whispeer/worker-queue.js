@@ -4,7 +4,7 @@ define(["PromiseWorker"], function (PromiseWorker) {
 	*   @param numberOfWorkers the number of workers you want to run in parallel
 	*   @param workerPath path to the worker file
 	*/
-	var PromiseQueue = function (Promise, numberOfWorkers, workerPath, requireOverRide) {
+	var PromiseQueue = function (Promise, numberOfWorkers, workerPath, setupMethod, requireOverRide) {
 		this._Promise = Promise;
 		this._numberOfWorkers = numberOfWorkers;
 		this._numberOfRunningWorkers = 0;
@@ -14,6 +14,10 @@ define(["PromiseWorker"], function (PromiseWorker) {
 
 		this._queue = [];
 		this._workers = [];
+
+		this._setupMethod = setupMethod;
+		this._setupDone = typeof setupMethod !== "function";
+		this._setupRunning = false;
 	};
 
 	PromiseQueue.prototype._createNewWorker = function () {
@@ -27,6 +31,22 @@ define(["PromiseWorker"], function (PromiseWorker) {
 	PromiseQueue.prototype._onFree = function (worker) {
 		if (this._workers.length > this._numberOfWorkers) {
 			//remove from workers
+			return;
+		}
+
+		if (this._setupRunning) {
+			return;
+		}
+
+		if (!this._setupDone) {
+			var that = this;
+			this._setupRunning = true;
+			this._setupMethod(worker, function () {
+				that._setupRunning = false;
+				that._setupDone = true;
+				that._onFree(worker);
+			});
+
 			return;
 		}
 
