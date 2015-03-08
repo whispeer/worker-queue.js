@@ -3,6 +3,8 @@ define(["PromiseWorker"], function (PromiseWorker) {
 	*   @param Promise a promise implementation
 	*   @param numberOfWorkers the number of workers you want to run in parallel
 	*   @param workerPath path to the worker file
+	*   @param optional setupMethod a function to call after the worker is created.
+	*   @param requireOverRide the path to require, if it can not be determined automatically.
 	*/
 	var PromiseQueue = function (Promise, numberOfWorkers, workerPath, setupMethod, requireOverRide) {
 		this._Promise = Promise;
