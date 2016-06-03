@@ -6,25 +6,29 @@ define(["PromiseWorker"], function (PromiseWorker) {
 	*   @param optional setupMethod a function to call after the worker is created.
 	*   @param requireOverRide the path to require, if it can not be determined automatically.
 	*/
-	var PromiseQueue = function (Promise, numberOfWorkers, workerPath, setupMethod, requireOverRide) {
+	var PromiseQueue = function (Promise, numberOfWorkers, workerPath, options) {
 		this._Promise = Promise;
 		this._numberOfWorkers = numberOfWorkers;
 		this._numberOfRunningWorkers = 0;
 
+		this._options = options || {};
+
 		this._workerPath = workerPath;
-		this._requireOverRide = requireOverRide;
+		this._requireOverRide = this._options.requirePath;
 
 		this._queue = [];
 		this._workers = [];
 
-		this._setupMethod = setupMethod;
-		this._setupDone = typeof setupMethod !== "function";
+		this._setupMethod = this._options.setupMethod;
+		this._setupDone = typeof this._setupMethod !== "function";
 		this._setupRunning = false;
+
+		this._createNewWorker();
 	};
 
 	PromiseQueue.prototype._createNewWorker = function () {
 		if (this._workers.length < this._numberOfWorkers) {
-			var newWorker = new PromiseWorker(this._Promise, this._workerPath, this._requireOverRide);
+			var newWorker = new PromiseWorker(this._Promise, this._workerPath, this._requireOverRide, this._options.workerScriptOverride);
 			newWorker.onFree(this._onFree.bind(this, newWorker));
 			this._workers.push(newWorker);
 		}
@@ -59,6 +63,7 @@ define(["PromiseWorker"], function (PromiseWorker) {
 		this._workers.forEach(function (worker) {
 			if (!worker.isBusy() && this._queue.length > 0) {
 				var current = this._queue.shift();
+
 				worker.runIfFree(current.task, current.metaListener).then(current.resolve, current.reject);
 			}
 		}, this);
@@ -94,7 +99,7 @@ define(["PromiseWorker"], function (PromiseWorker) {
 		this._numberOfWorkers = numberOfWorkers;
 
 		if (numberOfWorkers > this._numberOfWorkers) {
-			for (var i = 0; i < queue.length; i += 1) {
+			for (var i = 0; i < this._queue.length; i += 1) {
 				this._createNewWorker();
 			}
 		}

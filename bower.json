@@ -1,6 +1,6 @@
 {
   "name": "worker-queue.js",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "authors": [
     "Nils Kenneweg <nk@ovt.me>"
   ],
@@ -27,6 +27,6 @@
     "requirejs": "~2.1.16"
   },
   "dependencies": {
-    "require-promise-worker.js": "~0.1.3"
+    "require-promise-worker.js": "~0.1.4"
   }
 }
